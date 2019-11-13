@@ -1,26 +1,44 @@
 <template>
   <div id="app">
+    <span style="font-size:100px">☕</span>
     <h1>{{selected.company}}</h1>
     <sub>A new coffee experience brought to you by {{selected.owner}}, with finely crafted beverages and a carefully curated menu by {{selected.barista}}.</sub>
     <br>
     <p>Every beverage created with love and care for your satisfaction; we hope that you enjoy your time at {{selected.company}}. While considering the menu, take a moment to review our current specialty. It's a limited time menu item, so be sure to order while it's available!</p>
     <h2>Signature Beverage Of The Week</h2>
     <B>{{selected.menu[0].title}}</B><br>
+    <!--
     <canvas id="myCanvas"></canvas><br>
+    -->
     <p>Made with {{selected.menu[0].base.roast}} {{selected.menu[0].base.bean}} beans, this drink is carefully brewed as {{selected.menu[0].base.brew}}.
       Mixed gently with <span v-for="item in selected.menu[0].adds">{{item.name}}, </span>and topped with {{selected.menu[0].top.name}}. Enjoy.</p>
+    <hr width="400">
     <h2>Regular Menu Items</h2>
-    <ul>
-      <li><b>{{selected.menu[0].title}}</b></li>
-      <li>A {{selected.menu[0].base.brew}} of {{selected.menu[0].base.roast}} {{selected.menu[0].base.bean}} beans.</li>
-      <li v-for="item in selected.menu[0].adds">{{item.name}}</li>
-      <li>Topped with {{selected.menu[0].top.name}}.</li>
-    </ul>
+    <table style="margin:auto">
+      <tr>
+        <td>
+          <ul v-for="(drink, index) in selected.menu" v-if="index > 0 && index <= 3">
+            <h4>{{drink.title}}</h4>
+            <li>{{drink.base.brew}}, {{drink.base.roast}} {{drink.base.bean}} beans</li>
+            <li v-for="item in drink.adds">{{item.name}}</li>
+            <li>Topped with {{drink.top.name}}.</li>
+          </ul>
+        </td>
+        <td>
+          <ul v-for="(drink, index) in selected.menu" v-if="index > 3">
+            <h4>{{drink.title}}</h4>
+            <li>{{drink.base.brew}}, {{drink.base.roast}} {{drink.base.bean}} beans</li>
+            <li v-for="item in drink.adds">{{item.name}}</li>
+            <li>Topped with {{drink.top.name}}.</li>
+          </ul>
+        </td>
+      </tr>
+    </table>
+    <sub>This page brought to you procedurally by <a href="http://www.github.com/hectate/">Nathaniel 'Hectate' Mitchell.</a></sub>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
 import paper from 'paper';
 
 var data = {
@@ -94,7 +112,7 @@ var data = {
       'bacon bits',
       'cookie crumbles',
       'ice cream',
-      'toffie bits',
+      'toffee bits',
       'disgusting stuff',
       'skim milk',
       'strawberrys',
@@ -135,7 +153,7 @@ var data = {
     ],
     nouns: [
       'coffee',
-      'psuedo-latte',
+      'pseudo-latte',
       'darkness',
       'esspressemonte',
       'java',
@@ -149,8 +167,7 @@ var data = {
       'americano',
       'monster brew',
       'crude oil',
-      'hot chocolate',
-      'lemonade style coffee (made with lemons)',
+      'hot chocolate-esque',
       'nothing',
       'mango coffee',
       'iced coffee',
@@ -914,7 +931,6 @@ var data = {
 export default {
   name: 'app',
   components: {
-    HelloWorld
   },
   data: function () {
     return data;
@@ -923,7 +939,10 @@ export default {
     this.selected.company = generateCompany();
     this.selected.owner = generatePerson();
     this.selected.barista = generatePerson();
-    this.selected.menu.push(generateBeverage());
+    //this.selected.menu.push(generateBeverage());
+    for(var i=0; i < 7; i++) {
+      this.selected.menu.push(generateBeverage());
+    }
   },
   mounted: function() {
     var canvas = document.getElementById('myCanvas');
